@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penpot — Tutorial de Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #0a0a0f;
+  --paper:   #f4f1eb;
+  --cream:   #ede8df;
+  --accent:  #7c3aed;
+  --accent2: #06b6d4;
+  --accent3: #f59e0b;
+  --white:   #ffffff;
+  --mid:     #6b6b7b;
+  --card-bg: #ffffff;
+  --border:  rgba(10,10,15,0.10);
+  --shadow:  0 4px 32px rgba(10,10,15,0.10);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── Custom Cursor ── */
+.cursor{
+  width:12px;height:12px;
+  background:var(--accent);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9999;
+  transition:transform .15s ease,background .2s;
+  mix-blend-mode:multiply;
+}
+.cursor-ring{
+  width:36px;height:36px;
+  border:1.5px solid var(--accent);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9998;
+  transition:transform .35s ease,width .2s,height .2s;
+}
+
+/* ── Noise overlay ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:1;opacity:.6;
+}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding:0 8vw;
+  gap:4rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 70% at 70% 40%, rgba(124,58,237,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 20% 80%, rgba(6,182,212,.06) 0%, transparent 70%);
+  z-index:0;
+}
+
+.hero-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  animation:orbFloat 8s ease-in-out infinite;
+}
+.hero-orb-1{
+  width:500px;height:500px;
+  background:radial-gradient(circle, rgba(124,58,237,.18), transparent 70%);
+  top:-100px;right:-100px;
+  animation-delay:0s;
+}
+.hero-orb-2{
+  width:350px;height:350px;
+  background:radial-gradient(circle, rgba(6,182,212,.15), transparent 70%);
+  bottom:-80px;left:10%;
+  animation-delay:-4s;
+}
+
+@keyframes orbFloat{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-40px) scale(1.05)}
+}
+
+.hero-content{position:relative;z-index:2}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:'DM Mono',monospace;font-size:.75rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);
+  background:rgba(124,58,237,.08);
+  border:1px solid rgba(124,58,237,.2);
+  padding:.4rem .9rem;border-radius:999px;
+  margin-bottom:1.5rem;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp .8s .2s forwards;
+}
+.hero-eyebrow span{width:6px;height:6px;background:var(--accent);border-radius:50%;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+.hero-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(3rem,6vw,5.5rem);
+  font-weight:800;
+  line-height:.95;
+  letter-spacing:-.03em;
+  margin-bottom:1.5rem;
+  opacity:0;transform:translateY(30px);
+  animation:fadeUp .9s .4s forwards;
+}
+.hero-title .line{display:block}
+.hero-title .accent-word{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero-desc{
+  font-size:1.1rem;line-height:1.7;
+  color:var(--mid);max-width:500px;
+  margin-bottom:2.5rem;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp .9s .6s forwards;
+}
+
+.hero-ctas{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp .9s .8s forwards;
+}
+
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:.9rem 2rem;
+  background:var(--accent);color:#fff;
+  border-radius:12px;font-weight:600;font-size:1rem;
+  text-decoration:none;
+  transition:all .25s;
+  box-shadow:0 0 0 0 rgba(124,58,237,.4);
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(124,58,237,.35);
+  background:#6d28d9;
+}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:.9rem 1.8rem;
+  background:transparent;color:var(--ink);
+  border:1.5px solid var(--border);
+  border-radius:12px;font-weight:500;font-size:1rem;
+  text-decoration:none;cursor:pointer;
+  transition:all .25s;
+}
+.btn-ghost:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* ── 3D CANVAS ── */
+.hero-3d{
+  position:relative;z-index:2;
+  opacity:0;transform:translateX(30px);
+  animation:fadeLeft 1s .5s forwards;
+}
+@keyframes fadeLeft{to{opacity:1;transform:translateX(0)}}
+
+canvas#heroCanvas{
+  width:100%;max-width:560px;
+  border-radius:24px;
+  display:block;
+}
+
+/* ── STATS BAR ── */
+.stats{
+  background:var(--ink);color:#fff;
+  padding:2.5rem 8vw;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2rem;
+  position:relative;z-index:2;
+}
+.stat{text-align:center}
+.stat-num{
+  font-family:'Syne',sans-serif;
+  font-size:2.5rem;font-weight:800;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:block;
+}
+.stat-label{font-size:.85rem;color:rgba(255,255,255,.5);margin-top:.25rem;letter-spacing:.05em;text-transform:uppercase}
+
+/* ── SECTION ── */
+section{padding:7rem 8vw;position:relative}
+
+.section-tag{
+  font-family:'DM Mono',monospace;font-size:.72rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1rem;display:block;
+}
+.section-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2rem,4vw,3.2rem);
+  font-weight:800;letter-spacing:-.025em;
+  line-height:1.05;margin-bottom:1.5rem;
+}
+.section-lead{
+  font-size:1.1rem;line-height:1.7;
+  color:var(--mid);max-width:620px;
+}
+
+/* ── TOOLS COMPARISON ── */
+.tools-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;margin-top:3.5rem;
+}
+
+.tool-card{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:20px;padding:2rem;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  position:relative;overflow:hidden;
+  cursor:default;
+}
+.tool-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--card-accent,#7c3aed) 0%,transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.tool-card:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 24px 60px rgba(0,0,0,.12)}
+.tool-card:hover::before{opacity:.04}
+
+.tool-card.featured{
+  border-color:rgba(124,58,237,.3);
+  background:linear-gradient(145deg,#faf8ff,#fff);
+}
+.tool-card.featured::after{
+  content:'Seleccionada';
+  position:absolute;top:1.2rem;right:1.2rem;
+  background:var(--accent);color:#fff;
+  font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:.3rem .8rem;border-radius:999px;
+}
+
+.tool-logo{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;margin-bottom:1.2rem;
+  background:var(--logo-bg,rgba(124,58,237,.1));
+}
+
+.tool-name{
+  font-family:'Syne',sans-serif;font-size:1.4rem;
+  font-weight:700;margin-bottom:.4rem;
+}
+.tool-type{
+  font-size:.8rem;color:var(--mid);
+  font-family:'DM Mono',monospace;
+  margin-bottom:1rem;
+}
+.tool-desc{font-size:.92rem;line-height:1.6;color:var(--mid);margin-bottom:1.5rem}
+
+.tool-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.tag{
+  font-size:.75rem;padding:.3rem .75rem;
+  border-radius:999px;font-weight:500;
+  background:var(--tag-bg,rgba(124,58,237,.08));
+  color:var(--tag-color,var(--accent));
+  border:1px solid var(--tag-border,rgba(124,58,237,.15));
+}
+
+.tool-pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.pros-cons-col h4{
+  font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem;
+}
+.pros-cons-col ul{list-style:none}
+.pros-cons-col ul li{
+  font-size:.82rem;line-height:1.5;color:var(--mid);
+  padding:.2rem 0;display:flex;gap:.4rem;
+}
+.pros-cons-col ul li::before{font-size:.75rem;margin-top:.1rem}
+.pros ul li::before{content:'✓';color:#10b981}
+.cons ul li::before{content:'×';color:#f43f5e}
+
+.tool-link{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.85rem;font-weight:600;
+  color:var(--accent);text-decoration:none;
+  padding:.5rem 0;border-bottom:1.5px solid rgba(124,58,237,.2);
+  transition:all .2s;margin-top:.5rem;
+}
+.tool-link:hover{gap:.8rem;border-bottom-color:var(--accent)}
+
+/* ── COMPARISON TABLE ── */
+.compare-wrap{
+  margin-top:4rem;
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+}
+.compare-table{width:100%;border-collapse:collapse}
+.compare-table th{
+  background:var(--ink);color:#fff;
+  font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;
+  padding:1rem 1.2rem;text-align:left;
+}
+.compare-table th:first-child{width:22%}
+.compare-table td{
+  padding:.85rem 1.2rem;border-bottom:1px solid var(--border);
+  font-size:.88rem;vertical-align:middle;
+}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table tr:nth-child(even) td{background:rgba(10,10,15,.02)}
+.compare-table td.winner{
+  color:var(--accent);font-weight:600;
+}
+.check{color:#10b981;font-weight:700}
+.cross{color:#f43f5e}
+.partial{color:var(--accent3)}
+
+/* ── TUTORIAL ── */
+.tutorial-section{background:var(--ink);color:#fff;padding:7rem 8vw}
+.tutorial-section .section-title{color:#fff}
+.tutorial-section .section-lead{color:rgba(255,255,255,.5)}
+
+.steps-container{margin-top:4rem}
+
+.step-group{margin-bottom:3rem}
+.step-group-title{
+  font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;
+  color:var(--accent2);margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:.75rem;
+  padding-bottom:.75rem;border-bottom:1px solid rgba(255,255,255,.08);
+}
+.step-group-title span{
+  width:32px;height:32px;border-radius:10px;
+  background:rgba(6,182,212,.15);border:1px solid rgba(6,182,212,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;font-weight:800;color:var(--accent2);
+}
+
+.steps-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+
+.step-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:1.5rem;
+  transition:all .3s;
+  position:relative;overflow:hidden;
+}
+.step-card::before{
+  content:'';position:absolute;
+  left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,var(--accent),var(--accent2));
+  opacity:0;transition:opacity .3s;
+}
+.step-card:hover{
+  background:rgba(255,255,255,.07);
+  border-color:rgba(255,255,255,.15);
+  transform:translateX(4px);
+}
+.step-card:hover::before{opacity:1}
+
+.step-num{
+  font-family:'DM Mono',monospace;font-size:.7rem;
+  color:var(--accent2);letter-spacing:.1em;
+  margin-bottom:.6rem;display:block;
+}
+.step-title{
+  font-family:'Syne',sans-serif;font-size:1rem;
+  font-weight:700;color:#fff;margin-bottom:.5rem;
+}
+.step-desc{font-size:.88rem;line-height:1.6;color:rgba(255,255,255,.55)}
+
+.step-tip{
+  margin-top:.75rem;
+  background:rgba(124,58,237,.15);
+  border:1px solid rgba(124,58,237,.2);
+  border-radius:8px;padding:.6rem .9rem;
+  font-size:.8rem;color:rgba(255,255,255,.7);
+  display:flex;gap:.5rem;align-items:flex-start;
+}
+.step-tip::before{content:'💡';flex-shrink:0}
+
+/* ── INTERFACE PREVIEW ── */
+.interface-preview{
+  margin-top:4rem;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:24px;padding:3rem;
+}
+.interface-preview h3{
+  font-family:'Syne',sans-serif;font-size:1.3rem;
+  color:#fff;margin-bottom:2rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.interface-preview h3::before{
+  content:'';width:8px;height:8px;
+  background:var(--accent2);border-radius:50%;display:inline-block;
+}
+
+.mockup-browser{
+  background:#1a1a2e;border-radius:16px;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  transform:perspective(800px) rotateX(3deg);
+  transition:transform .4s;
+}
+.mockup-browser:hover{transform:perspective(800px) rotateX(0)}
+
+.browser-bar{
+  background:#16213e;padding:.75rem 1rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.browser-dots{display:flex;gap:.4rem}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#ff5f57}
+.dot-y{background:#febc2e}
+.dot-g{background:#28c840}
+.browser-url{
+  flex:1;background:rgba(255,255,255,.06);
+  border-radius:6px;padding:.3rem .8rem;
+  font-family:'DM Mono',monospace;font-size:.75rem;
+  color:rgba(255,255,255,.5);
+}
+
+.mockup-content{padding:1.5rem;display:grid;grid-template-columns:220px 1fr;gap:1rem;min-height:340px}
+
+.mockup-sidebar{
+  background:rgba(255,255,255,.04);border-radius:10px;
+  padding:1rem;display:flex;flex-direction:column;gap:.5rem;
+}
+.sidebar-item{
+  padding:.5rem .75rem;border-radius:6px;
+  font-size:.75rem;color:rgba(255,255,255,.5);
+  cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:.5rem;
+}
+.sidebar-item:hover,.sidebar-item.active{
+  background:rgba(124,58,237,.2);color:#fff;
+}
+.sidebar-item.active{color:var(--accent2)}
+.sidebar-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+.mockup-canvas{background:rgba(255,255,255,.02);border-radius:10px;padding:1.5rem;position:relative;overflow:hidden}
+
+.phone-mockup{
+  width:140px;background:#222;border-radius:20px;padding:6px;
+  margin:0 auto;box-shadow:0 10px 40px rgba(0,0,0,.5);
+  animation:phoneFloat 4s ease-in-out infinite;
+}
+@keyframes phoneFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.phone-screen{background:#1a1a2e;border-radius:15px;overflow:hidden}
+.phone-topbar{
+  background:#1a3a5c;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;color:rgba(255,255,255,.8);font-weight:600;letter-spacing:.05em;
+}
+.phone-body{padding:.4rem}
+.phone-item{
+  background:rgba(255,255,255,.06);border-radius:6px;
+  padding:.4rem .5rem;margin-bottom:.3rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.phone-item-name{font-size:.5rem;color:rgba(255,255,255,.7)}
+.phone-item-qty{font-size:.5rem;color:#10b981;font-weight:700}
+.phone-item-qty.low{color:#f43f5e}
+.phone-nav{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:#111;padding:.3rem .2rem;margin-top:.3rem;border-radius:6px;
+}
+.phone-nav-item{font-size:.45rem;color:rgba(255,255,255,.4);text-align:center;padding:.2rem}
+.phone-nav-item.active{color:var(--accent2)}
+
+.canvas-tools{
+  position:absolute;top:1rem;right:1rem;
+  display:flex;flex-direction:column;gap:.4rem;
+}
+.canvas-tool{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;cursor:pointer;transition:all .2s;
+  border:1px solid rgba(255,255,255,.05);
+}
+.canvas-tool:hover{background:rgba(124,58,237,.3);border-color:rgba(124,58,237,.4)}
+
+/* ── ERS RELATION ── */
+.ers-section{padding:7rem 8vw;background:var(--cream)}
+.ers-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:1.5rem;margin-top:3.5rem;
+}
+.ers-card{
+  background:#fff;border-radius:16px;padding:1.8rem;
+  border:1px solid var(--border);
+  transition:all .3s;
+  display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start;
+}
+.ers-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.08)}
+.ers-rf{
+  font-family:'DM Mono',monospace;
+  font-size:.8rem;font-weight:500;
+  background:rgba(124,58,237,.08);color:var(--accent);
+  padding:.4rem .7rem;border-radius:8px;white-space:nowrap;
+  border:1px solid rgba(124,58,237,.15);
+}
+.ers-screen{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.ers-desc{font-size:.85rem;color:var(--mid);line-height:1.5}
+
+/* ── CONCLUSIONS ── */
+.conclusions-section{padding:7rem 8vw}
+.conclusions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem}
+.conclusion-card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:20px;padding:2rem;
+  transition:all .3s;
+}
+.conclusion-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.conclusion-icon{
+  font-size:2rem;margin-bottom:1rem;
+  width:56px;height:56px;border-radius:16px;
+  background:rgba(124,58,237,.08);
+  display:flex;align-items:center;justify-content:center;
+}
+.conclusion-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.conclusion-text{font-size:.9rem;line-height:1.6;color:var(--mid)}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--ink);color:rgba(255,255,255,.4);
+  padding:3rem 8vw;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;
+}
+.footer-brand{font-family:'Syne',sans-serif;font-weight:700;color:#fff;font-size:1.1rem}
+.footer-credits{font-size:.82rem;text-align:center}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{
+  color:rgba(255,255,255,.4);text-decoration:none;
+  font-size:.85rem;transition:color .2s;
+}
+.footer-links a:hover{color:#fff}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ── Progress bar ── */
+.progress-bar{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  z-index:9999;width:0%;transition:width .1s;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:1.2rem 8vw;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all .3s;
+}
+nav.scrolled{
+  background:rgba(244,241,235,.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 2px 20px rgba(0,0,0,.06);
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;
+  letter-spacing:-.02em;text-decoration:none;color:var(--ink);
+  display:flex;align-items:center;gap:.5rem;
+}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+  font-size:.9rem;font-weight:500;color:var(--mid);
+  text-decoration:none;transition:color .2s;
+}
+.nav-links a:hover{color:var(--ink)}
+
+.nav-cta{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.6rem 1.4rem;background:var(--accent);color:#fff;
+  border-radius:10px;font-weight:600;font-size:.88rem;
+  text-decoration:none;transition:all .25s;
+}
+.nav-cta:hover{background:#6d28d9;transform:translateY(-1px)}
+
+/* ── Responsive ── */
+@media(max-width:960px){
+  .hero{grid-template-columns:1fr;padding-top:6rem;text-align:center}
+  .hero-3d{display:none}
+  .tools-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr}
+  .ers-grid,.conclusions-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .mockup-content{grid-template-columns:1fr}
+  .mockup-sidebar{display:none}
+  nav{padding:1rem 5vw}
+  .nav-links{display:none}
+  section{padding:4rem 5vw}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="#"><span>●</span> Penpot Tutorial</a>
+  <ul class="nav-links">
+    <li><a href="#herramientas">Herramientas</a></li>
+    <li><a href="#tutorial">Tutorial</a></li>
+    <li><a href="#ers">ERS</a></li>
+    <li><a href="#conclusiones">Conclusiones</a></li>
+  </ul>
+  <a class="nav-cta" href="https://penpot.app" target="_blank" rel="noopener">
+    Ir a Penpot ↗
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span></span> Análisis y Diseño — COTECNOVA 2026</div>
+    <h1 class="hero-title">
+      <span class="line">Wireframes</span>
+      <span class="line">con <span class="accent-word">Penpot</span></span>
+      <span class="line">Open Source</span>
+    </h1>
+    <p class="hero-desc">
+      Comparativa de las 3 mejores herramientas open source para prototipado y tutorial 
+      completo de <strong>Penpot</strong> — la plataforma de diseño más potente y gratuita del mercado.
+    </p>
+    <div class="hero-ctas">
+      <a href="#tutorial" class="btn-primary">
+        Ver Tutorial Completo →
+      </a>
+      <a href="https://penpot.app" target="_blank" rel="noopener" class="btn-ghost">
+        🔗 Abrir Penpot
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-3d">
+    <canvas id="heroCanvas" width="560" height="420"></canvas>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <span class="stat-num" data-count="20">0</span>
+    <span class="stat-label">Pasos del Tutorial</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num" data-count="3">0</span>
+    <span class="stat-label">Herramientas Analizadas</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num" data-count="100">0</span>
+    <span class="stat-label">% Open Source</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num" data-count="8">0</span>
+    <span class="stat-label">Pantallas Wireframe</span>
+  </div>
+</div>
+
+<!-- HERRAMIENTAS -->
+<section id="herramientas">
+  <span class="section-tag reveal">Comparativa</span>
+  <h2 class="section-title reveal">3 Herramientas Open Source<br>para Wireframes</h2>
+  <p class="section-lead reveal">
+    Evaluamos las principales alternativas gratuitas para crear wireframes en proyectos 
+    de análisis y diseño de sistemas, comparando características, ventajas y casos de uso.
+  </p>
+
+  <div class="tools-grid">
+
+    <!-- Penpot -->
+    <div class="tool-card featured reveal" style="--card-accent:#7c3aed">
+      <div class="tool-logo" style="--logo-bg:rgba(124,58,237,.12)">🎨</div>
+      <div class="tool-name">Penpot</div>
+      <div class="tool-type">// Web · Cloud · Open Source</div>
+      <p class="tool-desc">La alternativa open source más completa a Figma. Soporta colaboración en tiempo real, componentes reutilizables y prototipos interactivos, todo desde el navegador.</p>
+      <div class="tool-tags">
+        <span class="tag">Colaboración RT</span>
+        <span class="tag">Prototipos</span>
+        <span class="tag">Componentes</span>
+        <span class="tag">MPL-2.0</span>
+      </div>
+      <div class="tool-pros-cons">
+        <div class="pros-cons-col pros">
+          <h4 style="color:#10b981">✓ Pros</h4>
+          <ul>
+            <li>Colaboración en tiempo real</li>
+            <li>Prototipos interactivos</li>
+            <li>Sin instalación</li>
+            <li>Exporta PNG, SVG, CSS</li>
+            <li>Comunidad activa</li>
+          </ul>
+        </div>
+        <div class="pros-cons-col cons">
+          <h4 style="color:#f43f5e">× Contras</h4>
+          <ul>
+            <li>Requiere internet</li>
+            <li>Docker p/ self-host</li>
+            <li>Curva vs Figma</li>
+          </ul>
+        </div>
+      </div>
+      <a href="https://penpot.app" target="_blank" rel="noopener" class="tool-link">
+        Visitar penpot.app ↗
+      </a>
+    </div>
+
+    <!-- Pencil Project -->
+    <div class="tool-card reveal" style="--card-accent:#06b6d4">
+      <div class="tool-logo" style="--logo-bg:rgba(6,182,212,.12)">✏️</div>
+      <div class="tool-name">Pencil Project</div>
+      <div class="tool-type">// Escritorio · Offline · GPL-2.0</div>
+      <p class="tool-desc">Aplicación de escritorio especializada en wireframes con librerías UI predefinidas para web, Android e iOS. Ideal para uso individual sin conexión.</p>
+      <div class="tool-tags">
+        <span class="tag" style="--tag-bg:rgba(6,182,212,.08);--tag-color:#0891b2;--tag-border:rgba(6,182,212,.2)">Offline</span>
+        <span class="tag" style="--tag-bg:rgba(6,182,212,.08);--tag-color:#0891b2;--tag-border:rgba(6,182,212,.2)">Librerías UI</span>
+        <span class="tag" style="--tag-bg:rgba(6,182,212,.08);--tag-color:#0891b2;--tag-border:rgba(6,182,212,.2)">GPL-2.0</span>
+      </div>
+      <div class="tool-pros-cons">
+        <div class="pros-cons-col pros">
+          <h4 style="color:#10b981">✓ Pros</h4>
+          <ul>
+            <li>Funciona offline</li>
+            <li>Librería UI completa</li>
+            <li>Fácil para principiantes</li>
+            <li>Exporta PDF/HTML</li>
+          </ul>
+        </div>
+        <div class="pros-cons-col cons">
+          <h4 style="color:#f43f5e">× Contras</h4>
+          <ul>
+            <li>Sin colaboración RT</li>
+            <li>Sin actualizaciones</li>
+            <li>No prototipos</li>
+            <li>UI desactualizada</li>
+          </ul>
+        </div>
+      </div>
+      <a href="https://pencil.evolus.vn" target="_blank" rel="noopener" class="tool-link" style="color:#0891b2;border-bottom-color:rgba(6,182,212,.2)">
+        Visitar pencil.evolus.vn ↗
+      </a>
+    </div>
+
+    <!-- Excalidraw -->
+    <div class="tool-card reveal" style="--card-accent:#f59e0b">
+      <div class="tool-logo" style="--logo-bg:rgba(245,158,11,.12)">🖊️</div>
+      <div class="tool-name">Excalidraw</div>
+      <div class="tool-type">// Web · PWA · MIT License</div>
+      <p class="tool-desc">Pizarra virtual open source para bocetos y wireframes con estilo visual de "dibujado a mano". Perfecta para ideas rápidas y reuniones de levantamiento de requerimientos.</p>
+      <div class="tool-tags">
+        <span class="tag" style="--tag-bg:rgba(245,158,11,.08);--tag-color:#d97706;--tag-border:rgba(245,158,11,.2)">Bocetos rápidos</span>
+        <span class="tag" style="--tag-bg:rgba(245,158,11,.08);--tag-color:#d97706;--tag-border:rgba(245,158,11,.2)">Colaboración</span>
+        <span class="tag" style="--tag-bg:rgba(245,158,11,.08);--tag-color:#d97706;--tag-border:rgba(245,158,11,.2)">MIT</span>
+      </div>
+      <div class="tool-pros-cons">
+        <div class="pros-cons-col pros">
+          <h4 style="color:#10b981">✓ Pros</h4>
+          <ul>
+            <li>Sin registro obligatorio</li>
+            <li>Muy fácil de usar</li>
+            <li>Colaboración por enlace</li>
+            <li>PWA offline</li>
+          </ul>
+        </div>
+        <div class="pros-cons-col cons">
+          <h4 style="color:#f43f5e">× Contras</h4>
+          <ul>
+            <li>Sin librería UI</li>
+            <li>Solo baja fidelidad</li>
+            <li>Sin prototipos</li>
+          </ul>
+        </div>
+      </div>
+      <a href="https://excalidraw.com" target="_blank" rel="noopener" class="tool-link" style="color:#d97706;border-bottom-color:rgba(245,158,11,.2)">
+        Visitar excalidraw.com ↗
+      </a>
+    </div>
+  </div>
+
+  <!-- Comparison table -->
+  <div class="compare-wrap reveal">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Criterio</th>
+          <th>🎨 Penpot</th>
+          <th>✏️ Pencil Project</th>
+          <th>🖊️ Excalidraw</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Tipo</td><td class="winner">Web / Cloud</td><td>Escritorio</td><td>Web / PWA</td></tr>
+        <tr><td>Instalación</td><td class="winner">No requiere</td><td>Requiere instalar</td><td class="winner">No requiere</td></tr>
+        <tr><td>Colaboración RT</td><td><span class="check">✔ Sí</span></td><td><span class="cross">✘ No</span></td><td><span class="check">✔ Sí</span></td></tr>
+        <tr><td>Componentes UI</td><td><span class="check">✔ Completos</span></td><td><span class="partial">⚡ Básicos</span></td><td><span class="cross">✘ Manual</span></td></tr>
+        <tr><td>Prototipo interactivo</td><td><span class="check">✔ Sí</span></td><td><span class="cross">✘ No</span></td><td><span class="cross">✘ No</span></td></tr>
+        <tr><td>Offline</td><td><span class="partial">⚡ Parcial</span></td><td><span class="check">✔ Sí</span></td><td><span class="check">✔ PWA</span></td></tr>
+        <tr><td>Fidelidad wireframe</td><td class="winner">Alta</td><td>Media</td><td>Baja (boceto)</td></tr>
+        <tr><td>Exportación</td><td class="winner">PNG, SVG, PDF, CSS</td><td>PNG, PDF, HTML</td><td>PNG, SVG</td></tr>
+        <tr><td>Actualizaciones</td><td class="winner">Frecuentes</td><td>Escasas</td><td class="winner">Frecuentes</td></tr>
+        <tr><td>Licencia</td><td>MPL-2.0</td><td>GPL-2.0</td><td>MIT</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TUTORIAL -->
+<section class="tutorial-section" id="tutorial">
+  <span class="section-tag" style="color:var(--accent2)">Tutorial Paso a Paso</span>
+  <h2 class="section-title">Cómo usar Penpot para<br>crear Wireframes</h2>
+  <p class="section-lead">
+    20 pasos organizados en 8 módulos para crear wireframes profesionales 
+    de la Tienda La Esquinita usando Penpot desde cero.
+  </p>
+
+  <div class="steps-container">
+
+    <!-- Grupo 1 -->
+    <div class="step-group">
+      <div class="step-group-title"><span>01</span> Registro y Acceso</div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">PASO 01</span>
+          <div class="step-title">Acceder al sitio web</div>
+          <p class="step-desc">Abrir Chrome o Firefox y visitar <strong style="color:var(--accent2)">https://penpot.app</strong>. Hacer clic en "Start for free" o "Get started".</p>
+          <div class="step-tip">No se requiere tarjeta de crédito. El acceso es completamente gratuito.</div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 02</span>
+          <div class="step-title">Crear cuenta y explorar el Dashboard</div>
+          <p class="step-desc">Registrarse con correo o Google. En el Dashboard hacer clic en "New project" y nombrarlo: <em>Wireframe Tienda La Esquinita</em>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 2 -->
+    <div class="step-group">
+      <div class="step-group-title"><span>02</span> Crear el Archivo de Diseño</div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">PASO 03</span>
+          <div class="step-title">Crear un nuevo archivo</div>
+          <p class="step-desc">Dentro del proyecto, hacer clic en "+" o "New file". Se abrirá el editor de diseño en una nueva pestaña.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 04</span>
+          <div class="step-title">Conocer la interfaz del editor</div>
+          <p class="step-desc">El editor tiene 3 áreas: <strong style="color:var(--accent2)">Panel izquierdo</strong> (capas y activos), <strong style="color:var(--accent2)">Canvas central</strong> (lienzo), y <strong style="color:var(--accent2)">Panel derecho</strong> (propiedades del elemento).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 3 -->
+    <div class="step-group">
+      <div class="step-group-title"><span>03</span> Crear Frames (Pantallas)</div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">PASO 05</span>
+          <div class="step-title">Insertar un Frame</div>
+          <p class="step-desc">En la barra de herramientas superior, hacer clic en el ícono Frame (tecla <strong style="color:var(--accent2)">F</strong>). Seleccionar "Android — Small" (360×640 px) para simular el celular de Doña María.</p>
+          <div class="step-tip">Atajo: presiona F + arrastra en el canvas para dibujar el frame directamente.</div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 06</span>
+          <div class="step-title">Nombrar el Frame</div>
+          <p class="step-desc">En el panel de capas (izquierda), doble clic sobre el nombre del frame y renombrarlo: <em style="color:var(--accent2)">"Pantalla Principal — Inventario"</em>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 4 -->
+    <div class="step-group">
+      <div class="step-group-title"><span>04</span> Agregar Elementos UI</div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">PASO 07</span>
+          <div class="step-title">Barra de navegación superior</div>
+          <p class="step-desc">Herramienta Rectángulo (tecla <strong style="color:var(--accent2)">R</strong>). Dibujar 360×56px. Color de relleno: <strong style="color:var(--accent2)">#1a3a5c</strong>. Agregar texto (tecla T) con "La Esquinita".</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 08</span>
+          <div class="step-title">Tarjetas de productos</div>
+          <p class="step-desc">Rectángulo 320×80px, bordes redondeados (radio 8px), fondo blanco. Agregar nombre del producto, cantidad disponible e indicador de estado (verde/rojo según stock).</p>
+          <div class="step-tip">Duplicar con Ctrl+D para crear la lista de productos rápidamente.</div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 09</span>
+          <div class="step-title">Botón de alerta de stock</div>
+          <p class="step-desc">Rectángulo 160×44px, relleno <strong style="color:#ef4444">#e74c3c</strong>, texto blanco "⚠ Stock Bajo". Posicionarlo en la parte inferior del frame como acción rápida.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 10</span>
+          <div class="step-title">Barra de navegación inferior</div>
+          <p class="step-desc">Rectángulo 360×56px, fondo <strong style="color:var(--accent2)">#f5f5f5</strong>. Agregar 4 íconos: Inicio, Ventas, Crédito y Reportes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 5 -->
+    <div class="step-group">
+      <div class="step-group-title"><span>05</span> Componentes Reutilizables</div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">PASO 11</span>
+          <div class="step-title">Crear un componente</div>
+          <p class="step-desc">Seleccionar la tarjeta de producto. Clic derecho → "Create component" (<strong style="color:var(--accent2)">Ctrl+K</strong>). El componente aparece en Assets. Al modificarlo, todos los usos se actualizan.</p>
+          <div class="step-tip">Los componentes son la clave para diseños consistentes y escalables.</div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 12</span>
+          <div class="step-title">Reutilizar en otras pantallas</div>
+          <p class="step-desc">Crear frame de "Gestión de Créditos". Desde el panel Assets, arrastrar el componente al nuevo frame. Los cambios en el original se propagan automáticamente.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 6 -->
+    <div class="step-group">
+      <div class="step-group-title"><span>06</span> Prototipo Interactivo</div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">PASO 13</span>
+          <div class="step-title">Activar modo Prototype</div>
+          <p class="step-desc">En el panel derecho, hacer clic en la pestaña "Prototype" (ícono de triángulo/flecha). Se activará el modo de conexión entre pantallas.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 14</span>
+          <div class="step-title">Conectar pantallas</div>
+          <p class="step-desc">Seleccionar el botón "Ventas". Aparece un punto de conexión azul. Arrastrar hacia el frame de la pantalla de Ventas. Esto crea un flujo de navegación interactivo.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 15</span>
+          <div class="step-title">Previsualizar el prototipo</div>
+          <p class="step-desc">Clic en "▶ Play" en la barra superior (<strong style="color:var(--accent2)">Ctrl+Alt+P</strong>). Se abre previsualización donde se navega entre pantallas como si fuera la app real.</p>
+          <div class="step-tip">Compartir el enlace del prototipo con Doña María para obtener feedback antes de desarrollar.</div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 16</span>
+          <div class="step-title">Agregar transiciones</div>
+          <p class="step-desc">En la conexión entre frames, configurar tipo de transición: Slide, Fade o Push. Ajustar duración (ms) y curva de animación para simular la experiencia móvil.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 7 -->
+    <div class="step-group">
+      <div class="step-group-title"><span>07</span> Colaboración en Tiempo Real</div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">PASO 17</span>
+          <div class="step-title">Invitar a un colaborador</div>
+          <p class="step-desc">En el Dashboard, abrir el proyecto → "Share". Ingresar el correo del compañero. Rol "Can edit" para editar o "Can view" solo para revisar.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 18</span>
+          <div class="step-title">Edición simultánea</div>
+          <p class="step-desc">Con varios usuarios en el archivo, se ven los cursores de cada uno en tiempo real identificados con nombre y color. Los cambios se reflejan instantáneamente.</p>
+          <div class="step-tip">Ideal para que el equipo revise el wireframe con el docente sin enviar archivos.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grupo 8 -->
+    <div class="step-group">
+      <div class="step-group-title"><span>08</span> Exportar el Wireframe</div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">PASO 19</span>
+          <div class="step-title">Exportar como imagen</div>
+          <p class="step-desc">Seleccionar el frame. En el panel derecho → sección "Export" → "+" para agregar formato. Elegir PNG a 2x de resolución para mayor calidad en documentos.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">PASO 20</span>
+          <div class="step-title">Incluir en la ERS</div>
+          <p class="step-desc">Exportar cada pantalla como PNG. Incluir en la sección Anexos del documento ERS, referenciando cada wireframe con su RF (ej. RF-01, RF-03, RF-10).</p>
+          <div class="step-tip">El vínculo wireframe → RF demuestra trazabilidad completa según ISO 29148:2018.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- steps-container -->
+
+  <!-- Interface preview -->
+  <div class="interface-preview reveal">
+    <h3>Vista previa del Editor de Penpot</h3>
+    <div class="mockup-browser">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+        </div>
+        <div class="browser-url">app.penpot.app/design/proyecto-la-esquinita</div>
+      </div>
+      <div class="mockup-content">
+        <div class="mockup-sidebar">
+          <div style="font-size:.65rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem">Capas</div>
+          <div class="sidebar-item active"><div class="sidebar-dot"></div> Frame Principal</div>
+          <div class="sidebar-item" style="padding-left:1.5rem"><div class="sidebar-dot"></div> Barra Top</div>
+          <div class="sidebar-item" style="padding-left:1.5rem"><div class="sidebar-dot"></div> Tarjeta Producto</div>
+          <div class="sidebar-item" style="padding-left:1.5rem"><div class="sidebar-dot"></div> Btn Stock Bajo</div>
+          <div class="sidebar-item" style="padding-left:1.5rem"><div class="sidebar-dot"></div> Barra Nav</div>
+          <div class="sidebar-item"><div class="sidebar-dot"></div> Frame Ventas</div>
+          <div class="sidebar-item"><div class="sidebar-dot"></div> Frame Créditos</div>
+          <div class="sidebar-item"><div class="sidebar-dot"></div> Frame Reportes</div>
+        </div>
+        <div class="mockup-canvas">
+          <div class="canvas-tools">
+            <div class="canvas-tool" title="Mover">↖</div>
+            <div class="canvas-tool" title="Frame">⬜</div>
+            <div class="canvas-tool" title="Rectángulo">▭</div>
+            <div class="canvas-tool" title="Texto">T</div>
+            <div class="canvas-tool" title="Imagen">🖼</div>
+          </div>
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="phone-topbar">🏪 La Esquinita — Inventario</div>
+              <div class="phone-body">
+                <div class="phone-item">
+                  <span class="phone-item-name">🥚 Huevos</span>
+                  <span class="phone-item-qty">24 und.</span>
+                </div>
+                <div class="phone-item">
+                  <span class="phone-item-name">🧱 Panela</span>
+                  <span class="phone-item-qty low">4 und. ⚠</span>
+                </div>
+                <div class="phone-item">
+                  <span class="phone-item-name">🥛 Leche</span>
+                  <span class="phone-item-qty">12 und.</span>
+                </div>
+                <div class="phone-item">
+                  <span class="phone-item-name">🥤 Gaseosa</span>
+                  <span class="phone-item-qty low">3 und. ⚠</span>
+                </div>
+              </div>
+              <div class="phone-nav">
+                <div class="phone-nav-item active">🏠 Inicio</div>
+                <div class="phone-nav-item">💰 Ventas</div>
+                <div class="phone-nav-item">📒 Crédito</div>
+                <div class="phone-nav-item">📊 Report.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ERS RELATION -->
+<section class="ers-section" id="ers">
+  <span class="section-tag reveal">Trazabilidad</span>
+  <h2 class="section-title reveal">Relación Wireframes ↔ ERS</h2>
+  <p class="section-lead reveal">
+    Cada pantalla del wireframe se relaciona directamente con un Requerimiento Funcional (RF) 
+    del documento ERS de la Tienda La Esquinita, garantizando trazabilidad completa 
+    según ISO/IEC/IEEE 29148:2018.
+  </p>
+  <div class="ers-grid">
+    <div class="ers-card reveal">
+      <div class="ers-rf">RF-01</div>
+      <div>
+        <div class="ers-screen">Pantalla Principal — Inventario</div>
+        <div class="ers-desc">Mostrar en tiempo real la cantidad disponible de cada producto. Incluye indicadores visuales de stock bajo.</div>
+      </div>
+    </div>
+    <div class="ers-card reveal">
+      <div class="ers-rf">RF-02</div>
+      <div>
+        <div class="ers-screen">Alerta de Stock Bajo</div>
+        <div class="ers-desc">Generar alerta automática cuando el stock llegue al umbral mínimo configurado (por defecto 5 unidades).</div>
+      </div>
+    </div>
+    <div class="ers-card reveal">
+      <div class="ers-rf">RF-03</div>
+      <div>
+        <div class="ers-screen">Registro de Venta</div>
+        <div class="ers-desc">Registrar venta asociando productos, cantidades y medio de pago (efectivo, Nequi o Daviplata).</div>
+      </div>
+    </div>
+    <div class="ers-card reveal">
+      <div class="ers-rf">RF-06, RF-07, RF-08</div>
+      <div>
+        <div class="ers-screen">Gestión de Créditos</div>
+        <div class="ers-desc">Registrar deudas, bloquear crédito por límite ($50.000) y mostrar lista de clientes con saldo pendiente.</div>
+      </div>
+    </div>
+    <div class="ers-card reveal">
+      <div class="ers-rf">RF-10, RF-11</div>
+      <div>
+        <div class="ers-screen">Catálogo PWA — Clientes</div>
+        <div class="ers-desc">Catálogo de productos accesible por clientes vía PWA y opción de apartar productos sin registrarse.</div>
+      </div>
+    </div>
+    <div class="ers-card reveal">
+      <div class="ers-rf">RF-05</div>
+      <div>
+        <div class="ers-screen">Reporte Diario de Ventas</div>
+        <div class="ers-desc">Reporte generado al cierre del día desglosado por medio de pago: efectivo, Nequi y Daviplata.</div>
+      </div>
+    </div>
+    <div class="ers-card reveal">
+      <div class="ers-rf">RF-15</div>
+      <div>
+        <div class="ers-screen">Pedido a Proveedor</div>
+        <div class="ers-desc">Registrar pedidos anticipados a proveedores con lista de productos y cantidades requeridas.</div>
+      </div>
+    </div>
+    <div class="ers-card reveal">
+      <div class="ers-rf">RF-17</div>
+      <div>
+        <div class="ers-screen">Indicador Modo Offline</div>
+        <div class="ers-desc">Visualización del estado de sincronización: online, offline (operaciones en cola) o sincronizando.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSIONES -->
+<section class="conclusions-section" id="conclusiones">
+  <span class="section-tag reveal">Conclusiones</span>
+  <h2 class="section-title reveal">¿Por qué elegir Penpot?</h2>
+  <p class="section-lead reveal">
+    Las tres herramientas analizadas ofrecen alternativas válidas según el contexto. 
+    Penpot destaca como la opción más completa para proyectos académicos y profesionales.
+  </p>
+  <div class="conclusions-grid">
+    <div class="conclusion-card reveal">
+      <div class="conclusion-icon">🤝</div>
+      <div class="conclusion-title">Colaboración sin límites</div>
+      <p class="conclusion-text">Penpot permite que todo el equipo trabaje simultáneamente en el mismo archivo, ideal para proyectos grupales y revisiones con el docente en tiempo real.</p>
+    </div>
+    <div class="conclusion-card reveal">
+      <div class="conclusion-icon">⚡</div>
+      <div class="conclusion-title">Potencia profesional gratis</div>
+      <p class="conclusion-text">Prototipos interactivos, componentes reutilizables y exportación CSS son funciones que herramientas de pago cobran a precios elevados. Penpot las ofrece sin costo.</p>
+    </div>
+    <div class="conclusion-card reveal">
+      <div class="conclusion-icon">🔗</div>
+      <div class="conclusion-title">Integración con la ERS</div>
+      <p class="conclusion-text">Cada pantalla creada en Penpot puede vincularse directamente con un RF de la ERS, garantizando trazabilidad completa según ISO/IEC/IEEE 29148:2018.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">● Penpot Tutorial</div>
+  <div class="footer-credits">
+    Carlos Andrés Loaiza Escobar · Leila Agudelo Zuluaga<br>
+    <span style="opacity:.5">Análisis y Diseño de Sistemas — Felipe Gutiérrez Isaza · COTECNOVA 2026</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://penpot.app" target="_blank" rel="noopener">Penpot ↗</a>
+    <a href="https://pencil.evolus.vn" target="_blank" rel="noopener">Pencil ↗</a>
+    <a href="https://excalidraw.com" target="_blank" rel="noopener">Excalidraw ↗</a>
+  </div>
+</footer>
+
+<script>
+// ── Custom cursor
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.transform=`translate(${mx-6}px,${my-6}px)`;
+});
+(function animRing(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button,.tool-card,.step-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cursor.style.transform+=` scale(1.8)`;
+    ring.style.width='56px'; ring.style.height='56px';
+  });
+  el.addEventListener('mouseleave',()=>{
+    ring.style.width='36px'; ring.style.height='36px';
+  });
+});
+
+// ── Progress bar
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement.scrollTop;
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('progressBar').style.width=(s/h*100)+'%';
+  document.getElementById('navbar').classList.toggle('scrolled',s>60);
+});
+
+// ── Scroll reveal
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
+},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ── Count up
+const countObserver=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    const el=e.target;
+    const target=+el.dataset.count;
+    let cur=0; const step=target/40;
+    const t=setInterval(()=>{
+      cur=Math.min(cur+step,target);
+      el.textContent=Math.round(cur)+(target===100?'%':'');
+      if(cur>=target) clearInterval(t);
+    },30);
+    countObserver.unobserve(el);
+  });
+},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>countObserver.observe(el));
+
+// ── 3D Hero Canvas (Three.js-style with raw WebGL/Canvas2D)
+const canvas=document.getElementById('heroCanvas');
+const ctx=canvas.getContext('2d');
+canvas.width=560; canvas.height=420;
+
+const screens=[
+  {x:80,y:60,w:140,h:240,color:'#1a1a2e',label:'Inventario',delay:0},
+  {x:250,y:80,w:140,h:240,color:'#16213e',label:'Ventas',delay:.3},
+  {x:370,y:100,w:140,h:240,color:'#0f3460',label:'Crédito',delay:.6},
+];
+const particles=Array.from({length:60},()=>({
+  x:Math.random()*560,y:Math.random()*420,
+  vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,
+  r:Math.random()*2+.5,
+  op:Math.random()*.5+.1
+}));
+
+let t=0;
+function drawHero(){
+  t+=.012;
+  ctx.clearRect(0,0,560,420);
+
+  // Background gradient
+  const bg=ctx.createRadialGradient(280,210,0,280,210,300);
+  bg.addColorStop(0,'rgba(15,15,30,1)');
+  bg.addColorStop(1,'rgba(5,5,15,1)');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,560,420);
+
+  // Grid lines
+  ctx.strokeStyle='rgba(124,58,237,.08)'; ctx.lineWidth=1;
+  for(let x=0;x<560;x+=40){
+    ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,420);ctx.stroke();
+  }
+  for(let y=0;y<420;y+=40){
+    ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(560,y);ctx.stroke();
+  }
+
+  // Particles
+  particles.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>560) p.vx*=-1;
+    if(p.y<0||p.y>420) p.vy*=-1;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(124,58,237,${p.op})`;ctx.fill();
+  });
+
+  // Connecting lines between nearby particles
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x;
+      const dy=particles[i].y-particles[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<80){
+        ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle=`rgba(124,58,237,${.15*(1-d/80)})`;
+        ctx.lineWidth=.5;ctx.stroke();
+      }
+    }
+  }
+
+  // Phone screens (floating)
+  screens.forEach((s,i)=>{
+    const float=Math.sin(t+s.delay)*8;
+    const sx=s.x; const sy=s.y+float;
+
+    // Shadow
+    ctx.shadowColor='rgba(124,58,237,.3)';
+    ctx.shadowBlur=20;
+
+    // Phone body
+    const rnd=14;
+    ctx.fillStyle=s.color;
+    ctx.beginPath();
+    ctx.moveTo(sx+rnd,sy);ctx.lineTo(sx+s.w-rnd,sy);
+    ctx.quadraticCurveTo(sx+s.w,sy,sx+s.w,sy+rnd);
+    ctx.lineTo(sx+s.w,sy+s.h-rnd);
+    ctx.quadraticCurveTo(sx+s.w,sy+s.h,sx+s.w-rnd,sy+s.h);
+    ctx.lineTo(sx+rnd,sy+s.h);
+    ctx.quadraticCurveTo(sx,sy+s.h,sx,sy+s.h-rnd);
+    ctx.lineTo(sx,sy+rnd);
+    ctx.quadraticCurveTo(sx,sy,sx+rnd,sy);
+    ctx.closePath();ctx.fill();
+
+    ctx.shadowBlur=0;
+
+    // Screen border
+    ctx.strokeStyle='rgba(124,58,237,.4)';ctx.lineWidth=1.5;ctx.stroke();
+
+    // Top bar
+    ctx.fillStyle='#1a3a5c';
+    ctx.fillRect(sx+6,sy+6,s.w-12,28);
+
+    // Content bars (wireframe elements)
+    const colors=['rgba(255,255,255,.15)','rgba(255,255,255,.08)','rgba(124,58,237,.2)'];
+    [0,1,2,3].forEach((r,ri)=>{
+      ctx.fillStyle=ri===3?'rgba(239,68,68,.3)':colors[ri%colors.length];
+      ctx.fillRect(sx+8,sy+42+ri*48,s.w-16,36);
+    });
+
+    // Label
+    ctx.fillStyle='rgba(255,255,255,.7)';
+    ctx.font='bold 10px DM Sans,sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(s.label,sx+s.w/2,sy+s.h-10);
+
+    // Glowing dot on active screen
+    if(i===0){
+      ctx.beginPath();ctx.arc(sx+s.w-12,sy+20,4,0,Math.PI*2);
+      ctx.fillStyle=`rgba(16,185,129,${.7+Math.sin(t*3)*.3})`;ctx.fill();
+    }
+  });
+
+  // Accent glow
+  const glow=ctx.createRadialGradient(200,210,0,200,210,180);
+  glow.addColorStop(0,'rgba(124,58,237,.12)');
+  glow.addColorStop(1,'transparent');
+  ctx.fillStyle=glow; ctx.fillRect(0,0,560,420);
+
+  requestAnimationFrame(drawHero);
+}
+drawHero();
+
+// ── Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
